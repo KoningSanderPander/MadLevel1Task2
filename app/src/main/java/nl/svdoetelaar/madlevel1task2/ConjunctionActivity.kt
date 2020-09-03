@@ -10,7 +10,6 @@ import java.util.regex.Pattern.compile
 class ConjunctionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityConjunctionBinding
-    private val tf: Pattern = compile("^[TF]$")
     private val t: Pattern = compile("^[T]$")
     private val f: Pattern = compile("^[F]$")
 
@@ -26,46 +25,23 @@ class ConjunctionActivity : AppCompatActivity() {
     }
 
     private fun submit() {
-        val answers = arrayOf(
-            binding.ab2.text,
-            binding.ab3.text,
-            binding.ab4.text,
-            binding.ab5.text
-        )
-
-        var valid = true
         var correctAnswerCount = 0
-
-        for (answer in answers) {
-            if (!answer.matches(tf.toRegex())) {
-                answer.clear()
-                valid = false
-            }
-        }
-
-        if (!valid) {
-            invalid()
-            return
-        }
 
         if (binding.ab2.text.matches(t.toRegex())) correctAnswerCount++
         if (binding.ab3.text.matches(f.toRegex())) correctAnswerCount++
         if (binding.ab4.text.matches(f.toRegex())) correctAnswerCount++
         if (binding.ab5.text.matches(f.toRegex())) correctAnswerCount++
 
-        if (correctAnswerCount == 0){
+        if (correctAnswerCount == 0) {
             incorrect()
         } else {
             correct(correctAnswerCount)
         }
     }
 
-    private fun invalid() {
-        Toast.makeText(this, R.string.invalid, Toast.LENGTH_SHORT).show()
-    }
-
     private fun correct(correctAnswerCount: Int) {
-        Toast.makeText(this, getString(R.string.correct, correctAnswerCount), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.correct, correctAnswerCount), Toast.LENGTH_SHORT)
+            .show()
     }
 
     private fun incorrect() {
