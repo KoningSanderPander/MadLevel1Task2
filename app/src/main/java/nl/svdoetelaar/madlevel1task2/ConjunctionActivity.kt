@@ -5,15 +5,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import nl.svdoetelaar.madlevel1task2.databinding.ActivityConjunctionBinding
 import java.util.regex.Pattern
-import java.util.regex.Pattern.CASE_INSENSITIVE
 import java.util.regex.Pattern.compile
 
 class ConjunctionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityConjunctionBinding
-    private val tf: Pattern = compile("^[TF]$", CASE_INSENSITIVE + DEFAULT_KEYS_SEARCH_GLOBAL)
-    private val t: Pattern = compile("^[T]$", CASE_INSENSITIVE + DEFAULT_KEYS_SEARCH_GLOBAL)
-    private val f: Pattern = compile("^[F]$", CASE_INSENSITIVE + DEFAULT_KEYS_SEARCH_GLOBAL)
+    private val tf: Pattern = compile("^[TF]$")
+    private val t: Pattern = compile("^[T]$")
+    private val f: Pattern = compile("^[F]$")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,37 +22,50 @@ class ConjunctionActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        binding.btnSubmit.setOnClickListener { click() }
+        binding.btnSubmit.setOnClickListener { submit() }
     }
 
-    private fun click() {
-        if (!binding.ab2.text.matches(tf.toRegex()) ||
-            !binding.ab3.text.matches(tf.toRegex()) ||
-            !binding.ab4.text.matches(tf.toRegex()) ||
-            !binding.ab5.text.matches(tf.toRegex())
-        ) {
+    private fun submit() {
+        val answers = arrayOf(
+            binding.ab2.text,
+            binding.ab3.text,
+            binding.ab4.text,
+            binding.ab5.text
+        )
+
+        var valid = true
+        var correctAnswerCount = 0
+
+        for (answer in answers) {
+            if (!answer.matches(tf.toRegex())) {
+                answer.clear()
+                valid = false
+            }
+        }
+
+        if (!valid) {
             invalid()
             return
         }
 
-        if (binding.ab2.text.matches(t.toRegex()) &&
-            binding.ab3.text.matches(f.toRegex()) &&
-            binding.ab4.text.matches(f.toRegex()) &&
-            binding.ab5.text.matches(f.toRegex())
-        ) {
-            correct()
-        } else {
-            incorrect()
-        }
+        if (binding.ab2.text.matches(t.toRegex())) correctAnswerCount++
+        if (binding.ab3.text.matches(f.toRegex())) correctAnswerCount++
+        if (binding.ab4.text.matches(f.toRegex())) correctAnswerCount++
+        if (binding.ab5.text.matches(f.toRegex())) correctAnswerCount++
 
+        if (correctAnswerCount == 0){
+            incorrect()
+        } else {
+            correct(correctAnswerCount)
+        }
     }
 
     private fun invalid() {
         Toast.makeText(this, R.string.invalid, Toast.LENGTH_SHORT).show()
     }
 
-    private fun correct() {
-        Toast.makeText(this, R.string.correct, Toast.LENGTH_SHORT).show()
+    private fun correct(correctAnswerCount: Int) {
+        Toast.makeText(this, getString(R.string.correct, correctAnswerCount), Toast.LENGTH_SHORT).show()
     }
 
     private fun incorrect() {

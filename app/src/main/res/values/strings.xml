@@ -8,7 +8,7 @@
     <string name="ab">A ^ B</string>
     <string name="t_f">T / F</string>
     <string name="submit">Submit</string>
-    <string name="correct">Correct!</string>
+    <string name="correct">%d correct answers!</string>
     <string name="incorrect">Incorrect!</string>
     <string name="invalid">Invalid input!</string>
 </resources>
